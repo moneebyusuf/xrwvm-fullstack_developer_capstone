@@ -15,7 +15,7 @@ class CarModel(models.Model):
     car_make = models.ForeignKey(CarMake, on_delete=models.CASCADE)
     dealer_id = models.IntegerField()
     name = models.CharField(max_length=100)
-    
+
     CAR_TYPES = [
         ('SEDAN', 'Sedan'),
         ('SUV', 'SUV'),
@@ -28,7 +28,7 @@ class CarModel(models.Model):
         choices=CAR_TYPES,
         default='SUV'
     )
-    
+
     year = models.IntegerField(
         default=2023,
         validators=[
