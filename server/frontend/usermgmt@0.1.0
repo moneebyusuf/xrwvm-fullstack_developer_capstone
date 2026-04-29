@@ -1,0 +1,7 @@
+Building custom images
+Building theia-full images
+Created images:
+  • us.icr.io/skills-network-labs/tools.theiadocker.theia-full:ci
+  • us.icr.io/skills-network-labs/tools.theiaopenshift.theia-full:ci
+
+Please tag and push the images

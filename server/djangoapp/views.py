@@ -61,12 +61,12 @@ def registration(request):
 def get_cars(request):
     count = CarMake.objects.filter().count()
     if(count == 0):
-        initiate()
+        initiate() 
     car_models = CarModel.objects.select_related('car_make')
     cars = []
     for car_model in car_models:
-        cars.append({"CarModel": car_model.name, "CarMake": car_model.car_make.name})
-    return JsonResponse({"CarModels":cars})
+        cars.append({"CarMake": car_model.car_make.name, "CarModel": car_model.name})
+    return JsonResponse({"CarModels": cars})
 
 def get_dealerships(request, state="All"):
     if(state == "All"):
@@ -85,17 +85,23 @@ def get_dealer_details(request, dealer_id):
         return JsonResponse({"status":400,"message":"Bad Request"})
 
 def get_dealer_reviews(request, dealer_id):
-    if(dealer_id):
-        endpoint = "/fetchReviews/dealer/"+str(dealer_id)
+    if dealer_id:
+        endpoint = f"/fetchReviews/dealer/{dealer_id}"
         reviews = get_request(endpoint)
+        
         for review_detail in reviews:
-            response = analyze_review_sentiments(review_detail['review'])
-            print(response)
-            review_detail['sentiment'] = response['sentiment']
-        return JsonResponse({"status":200,"reviews":reviews})
-    else:
-        return JsonResponse({"status":400,"message":"Bad Request"})
-
+            # إضافة try-except لحماية الكود من انهيار خدمة تحليل المشاعر
+            try:
+                response = analyze_review_sentiments(review_detail['review'])
+                if response and 'sentiment' in response:
+                    review_detail['sentiment'] = response['sentiment']
+                else:
+                    review_detail['sentiment'] = "neutral"
+            except Exception:
+                review_detail['sentiment'] = "neutral" # قيمة افتراضية عند الفشل
+                
+        return JsonResponse({"status": 200, "reviews": reviews})
+    return JsonResponse({"status": 400, "message": "Bad Request"})
 def add_review(request):
     if(request.user.is_anonymous == False):
         data = json.loads(request.body)
