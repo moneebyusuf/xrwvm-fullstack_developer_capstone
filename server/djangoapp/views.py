@@ -11,6 +11,7 @@ from .restapis import get_request, analyze_review_sentiments, post_review
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
+
 @csrf_exempt
 def login_user(request):
     """Handle user login requests."""
@@ -24,11 +25,13 @@ def login_user(request):
         data = {"userName": username, "status": "Authenticated"}
     return JsonResponse(data)
 
+
 def logout_request(request):
     """Handle user logout requests."""
     logout(request)
     data = {"userName": ""}
     return JsonResponse(data)
+
 
 @csrf_exempt
 def registration(request):
@@ -64,6 +67,7 @@ def registration(request):
         data = {"userName": username, "error": "Already Registered"}
         return JsonResponse(data)
 
+
 def get_cars(request):
     """Fetch car makes and models, populating the database if empty."""
     count = CarMake.objects.filter().count()
@@ -78,6 +82,7 @@ def get_cars(request):
         })
     return JsonResponse({"CarModels": cars})
 
+
 def get_dealerships(request, state="All"):
     """Fetch dealerships based on the provided state."""
     if state == "All":
@@ -87,6 +92,7 @@ def get_dealerships(request, state="All"):
     dealerships = get_request(endpoint)
     return JsonResponse({"status": 200, "dealers": dealerships})
 
+
 def get_dealer_details(request, dealer_id):
     """Fetch details for a specific dealer."""
     if dealer_id:
@@ -95,6 +101,7 @@ def get_dealer_details(request, dealer_id):
         return JsonResponse({"status": 200, "dealer": dealership})
     else:
         return JsonResponse({"status": 400, "message": "Bad Request"})
+
 
 def get_dealer_reviews(request, dealer_id):
     """Fetch reviews for a dealer and perform sentiment analysis on each."""
@@ -117,6 +124,7 @@ def get_dealer_reviews(request, dealer_id):
         return JsonResponse({"status": 200, "reviews": reviews})
     return JsonResponse({"status": 400, "message": "Bad Request"})
 
+
 def add_review(request):
     """Allow authenticated users to post a review."""
     # Updated to 'is False' for PEP8 compliance
@@ -134,3 +142,4 @@ def add_review(request):
             })
     else:
         return JsonResponse({"status": 403, "message": "Unauthorized"})
+    

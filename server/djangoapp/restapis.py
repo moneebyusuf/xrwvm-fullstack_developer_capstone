@@ -49,3 +49,4 @@ def post_review(data_dict):
         return response.json()
     except Exception as e:  # Added print(e) to fix F841
         print(f"Network exception occurred: {e}")
+        

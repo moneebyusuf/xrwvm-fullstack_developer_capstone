@@ -61,4 +61,3 @@ def initiate():
             year=data['year'],
             dealer_id=data['dealer_id']
         )
-# Added a blank line at the end of the file to fix W292
